@@ -46,12 +46,13 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 
-// Ensure Database is Created
+// Ensure Database is Created & Seeded
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<ApplicationDbContext>();
     context.Database.EnsureCreated();
+    await DbInitializer.SeedAsync(context);
 }
 
 app.Run();
